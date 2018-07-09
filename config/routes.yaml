@@ -4,3 +4,9 @@
 #index:
 #    path: /
 #    defaults: { _controller: 'App\Controller\DefaultController::index' }
+
+index:
+    path: /customer/{id}
+    defaults: { _controller: 'App\Controller\CustomerController::get' }
+    requirements:
+        id: "[a-z]+"

@@ -22,10 +22,13 @@ services:
 
   mysql58:
     image: mysql:8.0.11
+    container_name: mysql58
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: expressive
-      MYSQL_USER: expressive
+      MYSQL_DATABASE: customer
+      MYSQL_USER: customer
+      MYSQL_PASSWORD: customer
+
     networks:
       - private
     labels:
