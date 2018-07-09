@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  php7:
+    build:
+      context: Dockerfile
+    expose:
+      - 80
+      - 443
+    volumes:
+      - .:/var/www
+    networks:
+      - public
+      - private
+    labels:
+      traefik.frontend.rule: "Host:symfony.local"
+      traefik.backend: "symfony"
+      traefik.frontend.entryPoints: "http, https"
+      traefik.protocol: "http"
+      traefik.port: "80"
+      traefik.docker.network: "symfony_public"
+
+  mysql58:
+    image: mysql:8.0.11
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: expressive
+      MYSQL_USER: expressive
+    networks:
+      - private
+    labels:
+      traefik.enable: "false"
+  traefik:
+    image: traefik
+    command: --web --docker --logLevel=DEBUG
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    networks:
+      - public
+      - private
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "$PWD/Dockerfile/config/traefik.toml:/traefik.toml"
+networks:
+  private:
+    driver: bridge
+  public:
+    driver: bridge
